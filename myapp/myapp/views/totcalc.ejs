@@ -1,0 +1,205 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" type="text/css" href="/css/style.css" />
+
+</head>
+<body>
+<header>
+    <div class="container">
+        <div id="branding">
+          <h4> <span class="highlight">PartiFest</span> </h4>
+        </div>
+    </div>
+</header>
+<% include ./nav %>
+
+<div class="row mt-5">
+    <div class="col-md-6 m-auto">
+      <div class="card card-body">
+        <h2 class="text-center mb-3"><i class="fas fa-sign-in-alt"></i>  Total Sales Report</h2>
+        <% include ./partials/messages %>
+
+                    
+        <% if ( success_messages !='' ) { %>
+          <div class="alert alert-success" >
+              <strong><%= success_messages %> </strong>
+          </div>
+          <% } %>
+      
+
+        <form action="/totcalc" method="POST">
+
+          <div class="form-group">
+            <label for="date">Date</label>
+            <input
+              type="date"
+              id="date"
+              name="date"
+              class="form-control"
+              placeholder="Enter Date"
+            />
+          </div>
+          <div class="form-group">
+            <label for="password">Total Sales</label>
+            <input
+              type="text"
+              id="tsales"
+              name="tsales"
+              class="form-control"
+              placeholder="Enter Total Sales"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="password">Total Profit</label>
+            <input
+              type="text"
+              id="tprofit"
+              name="tprofit"
+              class="form-control"
+              AutoPostBack="true" runat="server" onkeyup="substract()"
+              placeholder="Enter Total Profit"
+            />
+          </div>
+
+          <h3 style="text-align: center">Expenses:</h3>
+
+          <div class="form-group">
+            <label for="shop_expenses">Shop Expenses</label>
+            <input
+              type="text"
+              id="shop_expenses"
+              name="shop_expenses"
+              class="form-control"
+              AutoPostBack="true" runat="server" onkeyup="substract()"
+              placeholder="Enter Shop Expenses Amount"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="password">Good Transport</label>
+            <input
+              type="text"
+              id="good_transport"
+              name="good_transport"
+              class="form-control"
+              AutoPostBack="true" runat="server" onkeyup="substract()"
+              placeholder="Enter Good Transport Amount"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="password">School Fees</label>
+            <input
+              type="text"
+              id="school_fees"
+              name="school_fees"
+              class="form-control"
+              AutoPostBack="true" runat="server" onkeyup="substract()"
+              placeholder="Enter School Fees Amount"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="password">Contribution</label>
+            <input
+              type="text"
+              id="contribution"
+              name="contribution"
+              class="form-control"
+              AutoPostBack="true" runat="server" onkeyup="substract()"
+              placeholder="Enter Contribution Amount"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="password"> Coperative Contribution</label>
+            <input
+              type="text"
+              id="coperative_contribution"
+              name="coperative_contribution"
+              class="form-control"
+              AutoPostBack="true" runat="server" onkeyup="substract()"
+              placeholder="Enter Coperative Contribution Amount"
+            />
+          </div>
+          <div class="form-group">
+            <label for="password">Household</label>
+            <input
+              type="text"
+              id="household"
+              name="household"
+              class="form-control"
+              AutoPostBack="true" runat="server" onkeyup="substract()"
+              placeholder="Enter Household Amount"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="password">Salary</label>
+            <input
+              type="text"
+              id="salary"
+              name="salary"
+              class="form-control"
+              AutoPostBack="true" runat="server" onkeyup="substract()"
+              placeholder="Enter Salary Amount"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="password">Others</label>
+            <input
+              type="text"
+              id="others"
+              name="others"
+              class="form-control"
+              AutoPostBack="true" runat="server" onkeyup="substract()"
+              placeholder="Enter Others Amount"
+            />
+          </div>
+
+
+          <h3 style="text-align: center">Net Profit:</h3>
+          <div class="form-group">
+            <label for="password">Net Profit</label>
+            <input
+              type="text"
+              id="net_profit"
+              name="net_profit"
+              class="form-control"
+              AutoPostBack="true" runat="server" onkeyup="substract()"
+              placeholder="Enter Net Profit Amount"
+            />
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function substract() {
+        var tprofit =parseInt(document.getElementById("tprofit").value);
+        var shop_expenses = parseInt(document.getElementById("shop_expenses").value);
+        var good_transport =parseInt(document.getElementById("good_transport").value);
+        var school_fees = parseInt(document.getElementById("school_fees").value);
+        var contribution =parseInt(document.getElementById("contribution").value);
+        var coperative_contribution = parseInt(document.getElementById("coperative_contribution").value);
+        var others =parseInt(document.getElementById("others").value);
+        var household = parseInt(document.getElementById("household").value);
+        var salary = parseInt(document.getElementById("salary").value);
+        var result = (tprofit - (shop_expenses + good_transport + school_fees + contribution + coperative_contribution + others + household + salary));
+
+        document.getElementById("net_profit").value = result;
+    }
+</script>
+
+</body>
+</html>
