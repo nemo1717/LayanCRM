@@ -1,58 +1,12 @@
 <link rel="stylesheet" type="text/css" href="/css/styla.css" />
 
+<% include ./navy %>
 <div class="s-layout">
-        <!-- Sidebar -->
-        <div class="s-layout__sidebar">
-          <a class="s-sidebar__trigger" href="#0">
-             <i class="fa fa-bars"></i>
-          </a>     
-          <nav class="s-sidebar__nav">          
-             <ul>
-                    <li>
-                            <a class="s-sidebar__nav-link" href="#0">
-                               <i class="fa fa-home"></i><em>Layan CRM</em>
-                            </a>
-                        </li>
-                        <a class="s-sidebar__nav-link" href="#0">
-                        <div class="user-pic">
-                                <img class="img-responsive img-rounded" src="https://raw.githubusercontent.com/azouaoui-med/pro-sidebar-template/gh-pages/src/img/user.jpg"
-                                alt="User picture">
-                              </div>
-                              <div class="user-info">
-                                <span class="user-name">Jhon
-                                  <strong>Smith</strong>
-                                </span>
-                                <span class="user-role">Administrator</span>
-                                <span class="user-status">
-                                  <i class="fa fa-circle"></i>
-                                  <span>Online</span>
-                                </span>
-                              </div>
-                        </a>
-                <li>
-                   <a class="s-sidebar__nav-link" href="#0">
-                      <i class="fa fa-home"></i><em>Home</em>
-                   </a>
-                </li>
-                <li>
-                   <a class="s-sidebar__nav-link" href="#0">
-                     <i class="fa fa-user"></i><em>My Profile</em>
-                   </a>
-                </li>
-                <li>
-                   <a class="s-sidebar__nav-link" href="#0">
-                      <i class="fa fa-camera"></i><em>Camera</em>
-                   </a>
-                </li>
-             </ul>
-          </nav>
-        </div>
+
         
         <!-- Content -->
-        <main class="s-layout__content">
 
-     
-          
+<main class="s-layout__content">     
 <div class="section-form">
   <% include ./partials/messages %>
                               
@@ -66,12 +20,17 @@
           <div class="intro"> 
             <h1>Add Your Products</h1>
           </div>
-          <input type="text" value="" placeholder="Product Name (required)" name="pname" tabindex="1"/>
-          <input type="text" value="" placeholder="Product Category" name="cat" tabindex="3"/>
-          <input type="text" value="" placeholder="Unit Price (required)" name="price" tabindex="2"/>
-          <input type="number" value="" placeholder="Stock Quanity (required)" name="quant" tabindex="4"/>
-          <textarea placeholder="Product Description" name="description" tabindex="5" rows="10"></textarea>
-          <button type="submit" class="btn btn-primary btn-block">Submit Product</button>
+          <input type="text" value="" placeholder="Product Name " name="pname"  required/>
+          <select id="cat" class = "select" name = "cat" type = "text"  required = "required">
+            <option value = "" disabled selected>Select Category</option>
+            <% categ.forEach(function(item) { %>
+            <option > <%= item.cat_name %></option>
+            <% }); %>  
+          </select>
+          <input type="text" value="" placeholder="Unit Price " name="price" required/>
+          <input type="number" value="" placeholder="Stock Quanity" name="quant"  required/>
+          <textarea placeholder="Product Description" name="description"  rows="10"></textarea>
+          <button type="submit" class="btn btn-primary btn-block">Submit</button>
         </form>
       </div>
         </main>

@@ -4,30 +4,36 @@ var bcrypt = require('bcryptjs');
 var nodemailer = require('nodemailer');
 
 var db = mysql.createPool({
-  host: 'party.cmef2c3wa0gr.us-east-2.rds.amazonaws.com',
-  user: 'party',
-  password: 'Layanparty17',
-  database: 'partymania',
+  host: 'layanenterprises.cjajxkvdxg0f.us-east-2.rds.amazonaws.com',
+  user: 'layanent',
+  password: 'Layangrade17',
+  database: 'layanenterprises',
+  multipleStatements: true
 
 });
 
 module.exports = function(passport) {
   passport.use(
       
-      new LocalStrategy({ usernameField: 'email', passwordField: 'password' }, ( email, password, done) => {
-        
-        // Match email
-        db.query("select * from register where email = ? ",
+      new LocalStrategy({ usernameField: 'email', passReqToCallback: true }, (req, email, password, done) => {
+
+        const clientids = req.body.uname;
+
+        // Match Unique Name
+        db.query(" select * from Users where clientid = ? ; ", clientids, function(err, data){
+           if(!data.length){
+             return done(null, false, { message: 'The Unique Name is not Registered' });
+           }
+
+           else {
+                    // Match email
+        db.query(" select * from Users where email = ?  ; ",
         email, function(err, data){
-
-          console.log(email);
-          
-
           if(!data.length){
-            return done(null, false, { message: 'That email is not registered' });
+            return done(null, false, { message: 'The Email is not Registered' });
           }
 
-
+          /*
             
           else{
 
@@ -82,30 +88,31 @@ module.exports = function(passport) {
               //return done(null, false, { message: 'You need to verify email to login. To confirm email, please check your email inbox sent to you when you registered ' });
           
             }
-            else {
+            */
 
-        
-          
-          bcrypt.compare(password, data[0].Password, (err, isMatch)=>{
-            console.log(data[0].Password);
+        else {
+          // decrypy password
+          bcrypt.compare(password, data[0].password, (err, isMatch)=>{
+            console.log(data[0].password);
 
-            if(err) throw err;
+            //if(err) throw err;
 
          
             if(isMatch){
               return done(null, data[0]);
             }
             else{
-              return done(null, false, {message: 'Password is not correct'});
+              return done(null, false, {message: 'Password is not correct. Try Again'});
             }
           });
-        }
-        }
-           
+        }  
             
-        });
-      })
-    );
+      });
+
+    }
+  });
+  })
+);
       
 
     
@@ -115,7 +122,7 @@ module.exports = function(passport) {
   
       // used to deserialize the user
     passport.deserializeUser(function(id, done) {
-      db.query("select * from register where id = ?",[id],function(err,rows){
+      db.query("select * from Users where id = ?",[id],function(err,rows){
         done(err, rows[0]);
       });
     });

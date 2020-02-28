@@ -1,52 +1,8 @@
 <link rel="stylesheet" type="text/css" href="/css/styla.css" />
+
+<% include ./navy %>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
 <div class="s-layout">
-        <!-- Sidebar -->
-        <div class="s-layout__sidebar">
-          <a class="s-sidebar__trigger" href="#0">
-             <i class="fa fa-bars"></i>
-          </a>     
-          <nav class="s-sidebar__nav">          
-             <ul>
-                    <li>
-                            <a class="s-sidebar__nav-link" href="#0">
-                               <i class="fa fa-home"></i><em>Layan CRM</em>
-                            </a>
-                        </li>
-                        <a class="s-sidebar__nav-link" href="#0">
-                        <div class="user-pic">
-                                <img class="img-responsive img-rounded" src="https://raw.githubusercontent.com/azouaoui-med/pro-sidebar-template/gh-pages/src/img/user.jpg"
-                                alt="User picture">
-                              </div>
-                              <div class="user-info">
-                                <span class="user-name">Jhon
-                                  <strong>Smith</strong>
-                                </span>
-                                <span class="user-role">Administrator</span>
-                                <span class="user-status">
-                                  <i class="fa fa-circle"></i>
-                                  <span>Online</span>
-                                </span>
-                              </div>
-                        </a>
-                <li>
-                   <a class="s-sidebar__nav-link" href="#0">
-                      <i class="fa fa-home"></i><em>Home</em>
-                   </a>
-                </li>
-                <li>
-                   <a class="s-sidebar__nav-link" href="#0">
-                     <i class="fa fa-user"></i><em>My Profile</em>
-                   </a>
-                </li>
-                <li>
-                   <a class="s-sidebar__nav-link" href="#0">
-                      <i class="fa fa-camera"></i><em>Camera</em>
-                   </a>
-                </li>
-             </ul>
-          </nav>
-        </div>
         
         <!-- Content -->
         <main class="s-layout__content">
@@ -67,32 +23,31 @@
           
           </div>
 
-          <select id="pname" class = "select" name = "pname" type = "text" id="pname">
-              <optgroup>
+          <select id="pname" class = "select" name = "pname" type = "text"  required = "required">
             <option value = "" disabled selected>Select Product</option>
             <% data.forEach(function(item) { %>
             <option > <%= item.prod_name %></option>
             <% }); %>  
-            </optgroup>
           </select>
-          <input id = "date" type="date" value="" placeholder="Date" name="date" tabindex="1"/>
+
+          <input id = "date" type="date" value="" placeholder="Date" name="date" tabindex="1" required/>
 
      
 
-          <input id="price" type="number" placeholder="Unit Price Paid" name="price" tabindex="3"/>
-          <input id="quant" type="number"  placeholder="Quantity Bought" name="quant" tabindex="3"/>
+          <input id="price" type="number" placeholder="Unit Price Paid" name="price" tabindex="3" required/>
+          <input id="quant" type="number"  placeholder="Quantity Bought" name="quant" tabindex="3" required/>
 
-          <select id="cat" class = "select" name = "cat" type = "text" >
-           
-            <optgroup>
-          <% datum.forEach(function(item) { %>
-          <option > <%= item.Name %></option>
-          <% }); %>  
+          <select id="cust" class = "select" name = "cust" type = "text" > 
+          <optgroup>
+            <option value = "" disabled selected>Select Customer</option>
+           <% datum.forEach(function(item) { %>
+           <option > <%= item.Name %></option>
+           <% }); %>  
           </optgroup>
         </select>
 
           <textarea id="comment" placeholder="Comments" name="description" tabindex="5" rows="10"></textarea>
-          <button type="submit" id = "register" value = "register" disabled = "disabled" class="btn btn-primary btn-block">Submit Sale</button>
+          <button type="submit" id = "register" value = "register" class="btn btn-primary btn-block">Submit</button>
         </form>
        
       </div>
@@ -101,6 +56,8 @@
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
 <script>
+
+  /*
 $('#pname, #price, #quant').bind('change', function() {
     if(allFilled()) $('#register').removeAttr('disabled');
     else{$('#register').prop("disabled", true);}
@@ -113,4 +70,5 @@ function allFilled() {
     });
     return filled;
 }
+*/
 </script>

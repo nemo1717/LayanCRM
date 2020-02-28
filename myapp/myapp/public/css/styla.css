@@ -28,13 +28,29 @@
     width: 100%;
     min-height: 100vh;
  }
+
+ .s-layout__content {
+  display: block;
+  text-align: center;
+}
+
+form {
+
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+
+}
  
+ /*
  .s-layout__content {
     display: flex;
     justify-content:center;
     align-items: center;
     flex: 1;
  }
+ */
  
  /* Sidebar */
  .s-sidebar__trigger {
@@ -219,6 +235,15 @@
     background-color: #f3efe7;
     padding: 2em;
   }
+
+  @media only screen and (max-width: 768px) {
+    .section-form {
+      width: 100%;
+      margin: 3em auto;
+      background-color: #f3efe7;
+      padding: 2em;
+    }
+  }
   .section-form .intro {
     margin-bottom: 2em;
   }
@@ -231,12 +256,23 @@
     text-align: center;
     font-size: 1.23077em;
   }
+
+  .section-form h4 {
+    text-align: center;
+    font-size: 0.8077em;
+    color: #d37b7b;
+  }
+
+  .section-form h5 {
+    font-size: 1.077em;
+    color: #3639e7;
+  }
   
   input[type=text] , select {
     height: 45px;
   }
 
-  input[type=number],  input[type=date]{
+  input[type=number], input[type=password], input[type=email],  input[type=date] , .error, .good{
     height: 45px;
   }
   
@@ -250,6 +286,9 @@
     border: none;
     color: #555555;
     font-weight: 300;
+
+    border: 1.48px solid #ccc;
+    border-radius: 10px;
   }
 
 
@@ -264,6 +303,9 @@
    border: none;
    color: #555555;
    font-weight: 300;
+
+   border: 1.48px solid #ccc;
+  border-radius: 10px;
  }
  select {
    flex: 1;
@@ -292,7 +334,7 @@
  
   
   
-  input[type=text], input[type=date], textarea {
+  input[type=text], input[type=date], input[type=password], input[type=email], textarea {
     width: 100%;
     margin-bottom: 1em;
     font-size: .9em;
@@ -302,6 +344,11 @@
     border: none;
     color: #555555;
     font-weight: 300;
+
+
+    border: 1.48px solid #ccc;
+    border-radius: 10px;
+    
   }
   
   input[type=button] {
@@ -447,3 +494,135 @@ body {
  text.source {
    font-size: 10px;
  }
+
+
+ .sidebside input[type="text"], input[type="number"] {
+
+  width: 261px; 
+  padding: 5px;
+
+ }
+
+ @media only screen and (max-width: 768px) {
+  .sidebside input[type="text"], input[type="number"] {
+    width: 191px; 
+    padding: 5px;
+   }
+}
+
+
+input,
+textarea {
+  margin: 5px 0;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+input:invalid,
+select:invalid,
+textarea:invalid {
+  border-color: red;
+}
+
+input:valid,
+select:valid,
+textarea:valid {
+  border-color: rgb(6, 155, 26);
+}
+
+
+
+.error { 
+  width: 100%;
+  margin-bottom: 1em;
+  font-size: .9em;
+  color: #cfcece;
+  font-weight: 300;
+  padding: .5em 1em;
+  border: none;
+  color: #555555;
+  font-weight: 300;
+
+  border: 1.48px solid #ccc;
+  border-radius: 10px;
+  border-color: red;
+}
+
+
+.good { 
+  width: 100%;
+  margin-bottom: 1em;
+  font-size: .9em;
+  color: #cfcece;
+  font-weight: 300;
+  padding: .5em 1em;
+  border: none;
+  color: #555555;
+  font-weight: 300;
+
+  border: 1.48px solid #ccc;
+  border-radius: 10px;
+  border-color: rgb(6, 155, 26);
+}
+
+
+
+/* Nav Bar */
+
+.container-fluid {
+  margin: 20px 0px 20px;
+}
+
+.orangefont {
+  color: #ffc107;
+}
+
+.btn {
+  margin: 5px;
+}
+
+.card {
+  margin-bottom: 10px;
+}
+
+.top-row .card {
+  margin-bottom: 10px;
+  /* margin-top: 10px; */
+  height: 100%;
+}
+
+.top-row {
+  margin-bottom: 10px;
+  margin-top: 15px;
+}
+
+.orangediv1,
+.orangediv {
+  background-color: #ffc107;
+  color: white;
+}
+
+.buttonasign {
+  justify-content: center;
+  display: flex;
+}
+
+.no-left-padding {
+  padding-left: 0px !important;
+}
+
+select option {
+
+  font-size: medium;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-weight: 500;
+  
+  }
+
+
+
+ 
+
+
+ 
