@@ -243,28 +243,21 @@ input[type="date"]:not(.has-value):before{
   background-color: rgb(232, 234, 235);
 }
 
-
 select option {
 
-  font-size: medium;
-  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-  font-weight: 500;
-  
+font-size: medium;
+font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+font-weight: 500;
+
 }
-
-
-
-
-
-
 
     </style>
 </head>
 
 <body>
     <div class="container">
-        <input type="hidden" id="prod_name" value="<%= JSON.stringify(cat_name) %>" />
-        <input type="hidden" id="stockquantity" value="<%= JSON.stringify(quantity_sold) %>" />
+        <input type="hidden" id="prod_name" value="<%= JSON.stringify(prod_array) %>" />
+        <input type="hidden" id="stockquantity" value="<%= JSON.stringify(quantity_array) %>" />
 
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
@@ -343,59 +336,62 @@ select option {
             </ul>
           </div>
         </nav>
+
          
          
-             <!-- <div class="col-sm-4">
-                  <div class="card bg-light">
-                      <div class="card-body text-center">
-                          <h3>Revenue Growth</h3>
-                          <span style="color: #3fd23f;">
-                              <i class="fas fa-arrow-alt-circle-up fa-3x"></i>
-                          </span>
-                          <h1 class="orangefont">$200K</h1>
-                      </div>
-                  </div>
-              </div>
-              <div class="col-sm-4 no-left-padding">
-                  <div class="card bg-light">
-                      <div class="card-body text-center">
-                          <h3>Profit</h3>
-                          <span style="color: red;">
-                              <i class="fas fa-arrow-alt-circle-down fa-3x"></i>
-                          </span>
-                          <h1 class="orangefont"></h1 class="orangefont">
-                      </div>
-                  </div>
-              </div>
-
-              -->
-        
-            </br>
-
-          <input id="myButton" style="background-color: cadetblue;" value="Click to View and Hide Chart" type="button" name="answer" /> 
   
-   
-          <div id="myNav" class="row">
-          </br>
-              <div   class="col-sm-6">
-                <div class="card bg-light">
-                    <canvas id="pie-chart" height="320"></canvas>
-                </div>
-              </div>
-          </div>
+     
+ 
+        </br>
+
+         <form action="/product-activate-search"  autocomplete="off">
+         </br>
+         <select id="prod" class = "select" name = "prod" type = "text" >
+           <optgroup>
+         <option value = "" disabled selected>filter table by product name</option>
+         <% prods.forEach(function(item) { %>
+         <option > <%= item %></option>
+         <% }); %>  
+         </optgroup>
+       </select>
+           <select id="cat" class = "select" name = "cat" type = "text" >
+             <optgroup>
+           <option value = "" disabled selected>filter table by product category</option>
+           <% unique_cat.forEach(function(item) { %>
+           <option > <%= item %></option>
+           <% }); %>  
+           </optgroup>
+         </select>
+ 
+           <button type="submit" class="searchButton">
+       <i class="fa fa-search"></i>
+    </button>
+     </form>
 
           <table class="responstable"> 
             <tr>
-              <th data-th="Driver details"><span>Category Name</span></th>
-              <th>Quantity Sold</th>
+              <th>Action</th>
+              <th>Product Name</th>
+              <th>Category</th>
+              <th data-th="Driver details"><span>Unit Price</span></th>       
+              <th>Stock Quantity</th>
+              <th>Added By</th>
+              <th>Description</th>
+      
+ 
             </tr>
           
             <% data.forEach(function(item) { %>
             
             <tr>
-             
-              <td><%= item.cat_name%></td>
-              <td><%= item.quant %></td>
+              <td><a  href="activate-product/<%= item.prod_id %>" class="btn btn-primary" role="button" style="background-color: rgb(167, 49, 45);" onclick="return confirm('Are you sure want to Activate this Product?')" >Activate</a></td>
+              <td><%= item.prod_name %></td>
+              <td><%= item.cat_name %></td>
+              <td><%= item.unitprice %></td>
+              <td><%= item.stockquantity %></td>
+              <td><%= item.add_by %></td>
+              <td><%= item.description %></td>
+         
             </tr>
           
             <% }); %>
@@ -408,139 +404,139 @@ select option {
 
 <script>
 
- /*
-    var x_month = $('#x_month').val();
-    x_month = JSON.parse(x_month);
-
-    var quantity_array = $('#quantity_array').val();
-    quantity_array = JSON.parse(quantity_array);
-
+    /*
+       var x_month = $('#x_month').val();
+       x_month = JSON.parse(x_month);
    
-
-    var price_array = $('#price_array').val();
-    price_array = JSON.parse(price_array);
- 
-    var profit_array = $('#profit_array').val();
-    profit_array = JSON.parse(profit_array);
-      */
-
-    var prod_name = $('#prod_name').val();
-    prod_name = JSON.parse(prod_name);
-
-    var stockquantity = $('#stockquantity').val();
-    stockquantity = JSON.parse(stockquantity);
-  
-
-    //test
-
-
-    //Quantity chart
-    /*
-    new Chart(document.getElementById("vertical-bar-chart1"), {
-        type: 'bar',
-        data: {
-            labels: x_month,
-            datasets: [
-                {
-            
-                    backgroundColor: ["#49d8ef", "#a27aea", "#3cba9f", "#e8c3b9", "#ef5b9f", "#ecbc2a", "#fd7e14"],
-                    data: quantity_array
-                }
-            ]
-        },
-        options: {
-
-          plugins: {
-            datalabels: {
-              display: false,
-            },
-          },
-            legend: { display: false },
-            title: {
-                display: true,
-                text: 'Month Quantity Sold Chart'
-            }
-        }
-    });
-
- 
-
-    //Price chart
-    new Chart(document.getElementById("vertical-bar-chart2"), {
-        type: 'bar',
-        data: {
-            labels: x_month,
-            datasets: [
-                {
-                    backgroundColor: ["#49d8ef", "#a27aea", "#3cba9f", "#e8c3b9", "#ef5b9f", "#ecbc2a", "#fd7e14"],
-                    data: price_array,
+       var quantity_array = $('#quantity_array').val();
+       quantity_array = JSON.parse(quantity_array);
+   
+      
+   
+       var price_array = $('#price_array').val();
+       price_array = JSON.parse(price_array);
+    
+       var profit_array = $('#profit_array').val();
+       profit_array = JSON.parse(profit_array);
+         */
+   
+       var prod_name = $('#prod_name').val();
+       prod_name = JSON.parse(prod_name);
+   
+       var stockquantity = $('#stockquantity').val();
+       stockquantity = JSON.parse(stockquantity);
+     
+   
+       //test
+   
+   
+       //Quantity chart
+       /*
+       new Chart(document.getElementById("vertical-bar-chart1"), {
+           type: 'bar',
+           data: {
+               labels: x_month,
+               datasets: [
+                   {
                
-                }
-            ]
-        },
-        options: {
-
-          plugins: {
-            datalabels: {
-              display: false,
-            },
-          },
-
-          responsive: true,
-            legend: { display: false },
-            
-            title: {
-                display: true,
-                text: 'Monthly Revenue Chart'
-            }
-        }
-    });
-    */
-    /*
-    //Profits chart
-    new Chart(document.getElementById("bar-chart"), {
-        type: 'horizontalBar',
-        data: {
-            labels: x_month,
-            datasets: [
-                {
-                    backgroundColor: ["#49d8ef", "#a27aea", "#3cba9f", "#e8c3b9", "#ef5b9f", "#ecbc2a", "#fd7e14"],
-                    data: profit_array
-                }
-            ]
-        },
-        options: {
-            legend: { display: false },
-            title: {
-                display: true,
-                text: 'Profits'
-            }
-        }
-    });
-      */
-
-    //Inventory chart
-    new Chart(document.getElementById("pie-chart"), {
-        type: 'pie',
-        data: {
-            labels: prod_name,
-            datasets: [{
-                backgroundColor: ["#49d8ef", "#a27aea", "#3cba9f", "#e8c3b9", "#ef5b9f", "#ecbc2a", "#fd7e14"],
-                data: stockquantity
-            }]
-        },
-        options: {
-            title: {
-                display: true,
-                text: 'Category and Quantity Sold'
-            }
-        }
-    });
-
-  
-
-  
-</script>
+                       backgroundColor: ["#49d8ef", "#a27aea", "#3cba9f", "#e8c3b9", "#ef5b9f", "#ecbc2a", "#fd7e14"],
+                       data: quantity_array
+                   }
+               ]
+           },
+           options: {
+   
+             plugins: {
+               datalabels: {
+                 display: false,
+               },
+             },
+               legend: { display: false },
+               title: {
+                   display: true,
+                   text: 'Month Quantity Sold Chart'
+               }
+           }
+       });
+   
+    
+   
+       //Price chart
+       new Chart(document.getElementById("vertical-bar-chart2"), {
+           type: 'bar',
+           data: {
+               labels: x_month,
+               datasets: [
+                   {
+                       backgroundColor: ["#49d8ef", "#a27aea", "#3cba9f", "#e8c3b9", "#ef5b9f", "#ecbc2a", "#fd7e14"],
+                       data: price_array,
+                  
+                   }
+               ]
+           },
+           options: {
+   
+             plugins: {
+               datalabels: {
+                 display: false,
+               },
+             },
+   
+             responsive: true,
+               legend: { display: false },
+               
+               title: {
+                   display: true,
+                   text: 'Monthly Revenue Chart'
+               }
+           }
+       });
+       */
+       /*
+       //Profits chart
+       new Chart(document.getElementById("bar-chart"), {
+           type: 'horizontalBar',
+           data: {
+               labels: x_month,
+               datasets: [
+                   {
+                       backgroundColor: ["#49d8ef", "#a27aea", "#3cba9f", "#e8c3b9", "#ef5b9f", "#ecbc2a", "#fd7e14"],
+                       data: profit_array
+                   }
+               ]
+           },
+           options: {
+               legend: { display: false },
+               title: {
+                   display: true,
+                   text: 'Profits'
+               }
+           }
+       });
+         */
+   
+       //Inventory chart
+       new Chart(document.getElementById("pie-chart"), {
+           type: 'pie',
+           data: {
+               labels: prod_name,
+               datasets: [{
+                   backgroundColor: ["#49d8ef", "#a27aea", "#3cba9f", "#e8c3b9", "#ef5b9f", "#ecbc2a", "#fd7e14"],
+                   data: stockquantity
+               }]
+           },
+           options: {
+               title: {
+                   display: true,
+                   text: 'Top 8 Product Based on Quanity '
+               }
+           }
+       });
+   
+     
+   
+     
+   </script>
 
 <script>
     function myFunction() {
