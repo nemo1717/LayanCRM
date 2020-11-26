@@ -23,17 +23,27 @@
           
           </div>
 
-          <select id="pname" class = "select" name = "pname" type = "text"  required = "required">
+          <select id="ptype" class = "select" name = "ptype" type = "text" onchange='CheckColors(this.value);'  required = "required">
+            <option value = "" disabled selected>Select Product</option>
+            <option value = "rim"> Rim </option>
+            <option value = "battery"> Battery </option>
+          </select>
+
+          <select id="pname" class = "select" name = "pname" type = "text" style='display:none;'>
             <option value = "" disabled selected>Select Product</option>
             <% data.forEach(function(item) { %>
             <option > <%= item.prod_name %></option>
             <% }); %>  
           </select>
 
+          <select id="pnames" class = "select" name = "pnames" type = "text" style='display:none;'>
+            <option value = "" disabled selected>Select Product</option>
+            <% datam.forEach(function(item) { %>
+            <option > <%= item.prod_name %></option>
+            <% }); %>  
+          </select>
+
           <input id = "date" type="date" value="" placeholder="Date" name="date" tabindex="1" required/>
-
-     
-
           <input id="price" type="number" placeholder="Unit Price Paid" name="price" tabindex="3" required/>
           <input id="quant" type="number"  placeholder="Quantity Bought" name="quant" tabindex="3" required/>
 
@@ -46,6 +56,8 @@
           </optgroup>
         </select>
 
+        
+
           <textarea id="comment" placeholder="Comments" name="description" tabindex="5" rows="10"></textarea>
           <button type="submit" id = "register" value = "register" class="btn btn-primary btn-block">Submit</button>
         </form>
@@ -55,8 +67,35 @@
         </div>
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
-<script>
 
+
+<script type="text/javascript">
+          function CheckColors(val){
+           var element=document.getElementById('pname');
+          var elements=document.getElementById('pnames');
+           if(val=='rim' ) {
+             element.style.display='block';
+           }
+           else{
+            element.style.display='none';
+           }
+            if (val == 'battery'){
+             elements.style.display='block';
+           }
+
+          else {
+            //elements.style.display='block';
+           
+            elements.style.display='none';
+          }
+
+          }
+
+
+
+
+
+          
   /*
 $('#pname, #price, #quant').bind('change', function() {
     if(allFilled()) $('#register').removeAttr('disabled');
@@ -72,3 +111,4 @@ function allFilled() {
 }
 */
 </script>
+        

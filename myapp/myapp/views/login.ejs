@@ -11,6 +11,20 @@
 
 <header>
   <style>
+    #bodys {
+      font-family: 'Open Sans', sans-serif;
+      
+    background-image:url('../uploads/bimagesss.jpg');
+    background-attachment:fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+    }
+
+ 
+
+
+
+
     .container-fluid {
         margin: 20px 0px 20px;
     }
@@ -52,16 +66,19 @@
     .no-left-padding {
         padding-left: 0px !important;
     }
+
+
+
 </style>
 
 </header>
 
 
-  <body>
+  <body id="bodys">
 
-  
 
-    <div class="section-form">
+
+    <div style="text-align: center;" class="section-form">
       <% include ./partials/messages %>
                                   
       <% if ( success_messages !='' ) { %>
@@ -82,7 +99,7 @@
    
               </div >
 
-              <p class="lead mt-4"><h5>Dont have an account? <a href="/login">Register</a></h5></p>
+              <p class="lead mt-4"><h5>Dont have an account? <a href="/register">Register</a></h5></p>
 
               <button type="submit" class="btn btn-primary btn-block">Submit</button>
             </form>

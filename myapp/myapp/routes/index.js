@@ -12,6 +12,7 @@ var moment = require('moment');
 var request = require('request');
 var http = require('http');
 var fs = require('fs');
+var bodyParser = require('body-parser')
 
 
 // Mysql connectionString
@@ -78,7 +79,8 @@ router.get('/add_product', ensureAuthenticated, function (req, res, next) {
 router.post('/add_product', function (req, res, next) {
   const { pname, cat, quant, price, description } = req.body;
   var catid = 0;
-
+  var pnames = pname.replace(/\s+/g, ' ');
+  console.log(pnames); 
     db.query("select * from category where cat_name = ? and clientid = ? ", [cat, req.user.clientid ], function (err, rs) {
       if (err) {
         console.log(err);
@@ -90,7 +92,7 @@ router.post('/add_product', function (req, res, next) {
         }
         console.log(catid);
         const full_name = req.user.first_name + ' ' + req.user.last_name;
-        db.query("insert into Products(prod_name , categoryid , stockquantity, unitprice, description, clientid, add_by) values ('" + pname + "','" + catid + "', '" + quant + "', '" + price + "','" + description + "','" + req.user.clientid + "','" + full_name + "')", function (err, rs) {
+        db.query("insert into Products(prod_name , categoryid , stockquantity, unitprice, description, clientid, add_by) values ('" + pnames + "','" + catid + "', '" + quant + "', '" + price + "','" + description + "','" + req.user.clientid + "','" + full_name + "')", function (err, rs) {
           if (err) {
             console.log(err);
             req.flash('error', 'Error: Product not Inserted');
@@ -152,31 +154,53 @@ router.post('/inventory-update', function (req, res, next) {
 
 // sales
 router.get('/sales',  ensureAuthenticated, function (req, res, next) {
-  var sql = "select * from Products where clientid = ? and active_ind = 1; select * from Customer where clientid = ?;"
-  db.query(sql, [req.user.clientid, req.user.clientid], function (err, rs) {
+  const prodss = [];
+  var sql = "select * from Products where clientid = ? and active_ind = 1 and categoryid = 1 ; select * from Customer where clientid = ?; select * from Products where clientid = ? and active_ind = 1 and categoryid = 2 ; "
+  db.query(sql, [req.user.clientid, req.user.clientid, req.user.clientid], function (err, rs) {
     if (err) {
       res.send(err);
     }
     else {
-      res.render('sales', { data: rs[0], datum: rs[1] });
+   
+      
+      res.render('sales', { data: rs[0], datum: rs[1], datam: rs[2] });
     }
   });
 });
 
 router.post('/sales', function (req, res, next) {
-  const { date, pname, cat, price, quant, cust, description } = req.body;
+  const { date, pname, pnames, cat, price, quant, cust, description, sname } = req.body;
   var cid  = 0
+  console.log(pname);
+  console.log(pnames);
+
+
+
+  if(pname) {
+ 
     db.query("select prod_id from Products where prod_name = ?; select cust_id from Customer where Name = ? ;", [pname, cust], function (err, rs) {
       if (err) {
         res.send(err);
       }
       else {
-        var pid = rs[0][0].prod_id;
+        console.log(rs[0][0].prod_id);
+        var pid = rs[0][0].prod_id; 
+        var quantity = rs[0][0].quantity;
+        console.log(pid);
+        console.log(quantity);
    
         if(cust) {
         cid = rs[1][0].cust_id;
         }
- 
+
+        if (quantity <= 0 ){
+          req.flash('Error', 'Product Quanity is 0 or less than 0. Please update product quantity')
+            res.redirect('/sales');
+
+        }
+
+
+        else {
         const tot_price = quant * price;
         const full_name = req.user.first_name + ' ' + req.user.last_name;
         db.query("insert into Sales(prod_id, cust_id, date , price, quantity, comments, clientid, add_by, total_price) values ('" + pid + "','" + cid + "','" + date + "', '" + price + "', '" + quant + "','" + description + "','" + req.user.clientid + "','" + full_name + "', '" + tot_price + "'); update Products set stockquantity = stockquantity - ? where prod_name = ? and clientid = ?",[quant, pname, req.user.clientid], function (err, rs) {
@@ -191,7 +215,52 @@ router.post('/sales', function (req, res, next) {
           }
         });
       }
+      }
     });
+  }
+
+  if (pnames){
+
+    db.query("select *,  prod_id from Products where prod_name = ?; select cust_id from Customer where Name = ? ;", [pnames, cust], function (err, rs) {
+      if (err) {
+        res.send(err);
+      }
+      else {
+        console.log(rs[0][0].prod_id);
+        var pid = rs[0][0].prod_id; 
+        var quantity = rs[0][0].stockquantity;
+        console.log('ggggggtrree ' + pid);
+        console.log('ggggggtrree ' + quantity);
+   
+        if(cust) {
+        cid = rs[1][0].cust_id;
+        }
+
+        if (quantity <= 0 ){
+          req.flash('error', 'Error: Product Quanity is 0 or less than 0. Please update product quantity')
+            res.redirect('/sales');
+
+        }
+        else {
+ 
+        const tot_price = quant * price;
+        const full_name = req.user.first_name + ' ' + req.user.last_name;
+        db.query("insert into Sales(prod_id, cust_id, date , price, quantity, comments, clientid, add_by, total_price) values ('" + pid + "','" + cid + "','" + date + "', '" + price + "', '" + quant + "','" + description + "','" + req.user.clientid + "','" + full_name + "', '" + tot_price + "'); update Products set stockquantity = stockquantity - ? where prod_name = ? and clientid = ?",[quant, pnames, req.user.clientid], function (err, rs) {
+          if (err) {
+            console.log(err);
+            req.flash('error', 'Error: Sale not Inserted')
+            res.redirect('/sales');
+          }
+          else {
+            req.flash('success_msg', 'Sale Successfully Added')
+            res.redirect('/sales');
+          }
+        });
+      }
+      }
+    });
+  }
+
 });
 
 
@@ -205,7 +274,8 @@ router.get('/supplier',  ensureAuthenticated, function (req, res, next) {
 router.post('/supplier', function (req, res, next) {
   const { name, pno, email, addy, city, state, country, description } = req.body;
     const full_name = req.user.first_name + ' ' + req.user.last_name;
-    db.query("insert into Supplier(sup_name, phone_number , email, address, city, state, country, description, clientid, add_by) values ('" + name + "','" + pno + "', '" + email + "', '" + addy + "','" + city + "', '" + state + "','" + country + "', '" + description + "', '" + req.user.clientid + "',  '" + full_name + "')", function (err, rs) {
+    var names = name.replace(/\s+/g, ' ');
+    db.query("insert into Supplier(sup_name, phone_number , email, address, city, state, country, description, clientid, add_by) values ('" + names + "','" + pno + "', '" + email + "', '" + addy + "','" + city + "', '" + state + "','" + country + "', '" + description + "', '" + req.user.clientid + "',  '" + full_name + "')", function (err, rs) {
       if (err) {
         console.log(err);
         req.flash('error', 'Error: Supplier not Inserted')
@@ -227,8 +297,9 @@ router.get('/customer',  ensureAuthenticated, function (req, res, next) {
 
 router.post('/customer', function (req, res, next) {
   const { name, pno, email, addy, city, state, country } = req.body;
+  var names = name.replace(/\s+/g, ' ');
     const full_name = req.user.first_name + ' ' + req.user.last_name
-    db.query("insert into Customer(Name, phone_no, email, address, city, state, country, clientid, add_by) values ('" + name + "','" + pno + "', '" + email + "', '" + addy + "','" + city + "', '" + state + "','" + country + "','" + req.user.clientid+ "','" + full_name  + "')", function (err, rs) {
+    db.query("insert into Customer(Name, phone_no, email, address, city, state, country, clientid, add_by) values ('" + names + "','" + pno + "', '" + email + "', '" + addy + "','" + city + "', '" + state + "','" + country + "','" + req.user.clientid+ "','" + full_name  + "')", function (err, rs) {
       if (err) {
         console.log(err);
         req.flash('error', 'Error: Customer not Inserted')
@@ -240,10 +311,6 @@ router.post('/customer', function (req, res, next) {
       }
     });
 });
-
-
-
-
 
 
 // picture upload with multer
@@ -1525,8 +1592,7 @@ router.get('/expenses',  ensureAuthenticated, function (req, res, next) {
 router.post('/expenses', function (req, res, next) {
   const{date, shop_exp, prod_transp, sch_fee, contri, cop, hhold, sal, others} = req.body;
   var total_exp = parseFloat(shop_exp) + parseFloat(prod_transp) + parseFloat(sch_fee) + parseFloat(contri) + parseFloat(cop) + parseFloat(hhold) + parseFloat(sal) + parseFloat(others);
-  const full_name = req.user.first_name + ' ' + req.user.last_name
-  console.log(total_exp);
+  const full_name = req.user.first_name + ' ' + req.user.last_name;
   db.query("Insert into Expenses (date, shop_expenses, good_transport, school_fees, contribution, coperative, household, salary, others, clientid, add_by, total_expenses) values ('" + date + "','" + shop_exp + "','" + prod_transp + "', '" + sch_fee + "','" + contri + "','" + cop + "', '" + hhold + "','" + sal + "','" + others + "','" + req.user.clientid + "','" + full_name + "', '" + total_exp + "')", function (err, rs) {
     if (err) {
       console.log(err);
@@ -1831,7 +1897,67 @@ router.get('/netprofit',  ensureAuthenticated, function (req, res, next) {
     });
   });
   
+
+
+
+
+
+
+
+  // sales
+router.get('/saler',  ensureAuthenticated, function (req, res, next) {
+  const prodss = [];
+  var sql = "select * from Products where clientid = ? and active_ind = 1; select * from Customer where clientid = ?;"
+  db.query(sql, [req.user.clientid, req.user.clientid], function (err, rs) {
+    if (err) {
+      res.send(err);
+    }
+    else {
+      res.render('saler', { data: rs[0], datum: rs[1] });
+    }
+  });
+});
+
+router.post('/saler', function (req, res, next) {
+  const { date, pname, cat, price, quant, cust, description, sname } = req.body;
+  var cid  = 0
+  console.log(pname);
+
+  var myTableArray = req.body.myTableArray;
+  console.log(myTableArray);
+  console.log(req.body);
   
+ 
+    db.query("select prod_id from Products where prod_name = ?; select cust_id from Customer where Name = ? ;", [pname, cust], function (err, rs) {
+      if (err) {
+        res.send(err);
+      }
+      else {
+        console.log(rs[0][0].prod_id);
+        var pid = rs[0][0].prod_id; 
+        console.log(pid);
+   
+        if(cust) {
+        cid = rs[1][0].cust_id;
+        }
+ 
+        const tot_price = quant * price;
+        const full_name = req.user.first_name + ' ' + req.user.last_name;
+        db.query("insert into Sales(prod_id, cust_id, date , price, quantity, comments, clientid, add_by, total_price) values ('" + pid + "','" + cid + "','" + date + "', '" + price + "', '" + quant + "','" + description + "','" + req.user.clientid + "','" + full_name + "', '" + tot_price + "'); update Products set stockquantity = stockquantity - ? where prod_name = ? and clientid = ?",[quant, pname, req.user.clientid], function (err, rs) {
+          if (err) {
+            console.log(err);
+            req.flash('error', 'Error: Sale not Inserted')
+            res.redirect('/saler');
+          }
+          else {
+            req.flash('success_msg', 'Sale Successfully Added')
+            res.redirect('/saler');
+          }
+        });
+      }
+    });
+});
+
 
 
 
