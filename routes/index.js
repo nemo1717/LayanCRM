@@ -17,10 +17,10 @@ var fs = require('fs');
 // Mysql connectionString
 var mysql = require('mysql');
 var db = mysql.createPool({
-  host: 'layanenterprises.cjajxkvdxg0f.us-east-2.rds.amazonaws.com',
-  user: 'layanent',
-  password: 'Layangrade17',
-  database: 'layanenterprises',
+  host: 'xxxxx',
+  user: 'xxx',
+  password: 'xxxx',
+  database: 'xxxxxx',
   multipleStatements: true
 
 });
@@ -44,10 +44,6 @@ router.get('/', function (req, res, next) {
 router.get('/navy', function (req, res, next) {
   res.render('navy');
 });
-
-
-
-
 
 //test mysql connection
 router.get('/testconn', function (req, res, next) {
