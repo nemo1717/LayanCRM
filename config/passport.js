@@ -4,10 +4,10 @@ var bcrypt = require('bcryptjs');
 var nodemailer = require('nodemailer');
 
 var db = mysql.createPool({
-  host: 'layanenterprises.cjajxkvdxg0f.us-east-2.rds.amazonaws.com',
-  user: 'layanent',
-  password: 'Layangrade17',
-  database: 'layanenterprises',
+  host: 'xxxxxx',
+  user: 'xxx',
+  password: 'xxxx',
+  database: 'xxxx',
   multipleStatements: true
 
 });
